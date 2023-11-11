@@ -19,7 +19,6 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: terraform
     permissions:
       contents: read
       pull-requests: write
