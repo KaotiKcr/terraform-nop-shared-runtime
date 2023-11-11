@@ -4,5 +4,5 @@ output "hello_kaotik" {
 
 output "vpc_id" {
   description = "ID of the VPC"
-  value       = try(data.aws_vpc.selected[0].name, aws_vpc.this[0].name)
+  value       = data.aws_vpc.selected.id
 }
