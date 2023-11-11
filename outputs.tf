@@ -2,7 +2,7 @@ output "hello_kaotik" {
 	value = "Hello, KaotiK!"
 }
 
-output "vpc_name" {
+output "vpc_id" {
   description = "ID of the VPC"
   value       = data.aws_vpc.selected.id
 }
