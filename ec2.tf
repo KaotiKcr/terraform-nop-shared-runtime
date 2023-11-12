@@ -25,7 +25,7 @@ data "aws_ami" "aws_ubuntu" {
 
 resource "aws_eip" "shared_kaotik" {
   instance = "${aws_instance.shared_kaotik.id}"
-  vpc      = true
+  domain = "vpc"
 }
 
 resource "aws_instance" "shared_kaotik" {
