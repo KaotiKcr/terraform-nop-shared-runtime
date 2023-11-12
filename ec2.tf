@@ -44,8 +44,8 @@ resource "aws_instance" "shared_kaotik" {
 }
 
 resource "aws_security_group" "shared_web" {
-  name        = "demo_sg"
-  description = "allow ssh on 22 & http on port 80"
+  name        = "shared_web"
+  description = "allow ssh on 22 & http/s on port 80/443"
   vpc_id      = data.aws_vpc.selected.id
 
   ingress {
