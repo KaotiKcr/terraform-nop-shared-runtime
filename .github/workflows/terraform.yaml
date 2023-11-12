@@ -34,7 +34,7 @@ jobs:
 
     - name: Terraform Init
       id: init
-      run: terraform init
+      run: terraform init -input=false -backend-config=env/kaotik-prod/backend.hcl
       continue-on-error: true
 
     - name: Terraform Validate
