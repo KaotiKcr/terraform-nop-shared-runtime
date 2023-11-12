@@ -106,9 +106,6 @@ jobs:
       if: steps.plan.outcome == 'failure' || steps.validate.outcome == 'failure' || steps.init.outcome == 'failure'
       run: exit 1
 
-    - name: Terraform Unlock State
-      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-      run: terraform force-unlock -force a337ebac-f036-765e-c812-44aa7fea3b9b
 
 
     - name: Terraform Apply
