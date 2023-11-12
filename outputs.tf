@@ -8,5 +8,5 @@ output "vpc_id" {
 }
 
 output "aws_instance_public_dns" {
-  value = aws_instance.aws_ubuntu.public_dns
+  value = aws_instance.shared_kaotik.public_dns
 }
