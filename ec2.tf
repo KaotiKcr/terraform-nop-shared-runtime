@@ -20,6 +20,18 @@ data "aws_ami" "aws_ubuntu" {
   }
 }
 
+data "aws_ami" "ubuntu" {
+    most_recent = true
+    filter {
+        name = "name"
+        values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+    }
+    filter {
+        name   = "virtualization-type"
+        values = ["hvm"]
+    }
+    owners = ["099720109477"]
+}
 
 # RESOURCES
 
@@ -29,16 +41,19 @@ resource "aws_eip" "shared_kaotik" {
 }
 
 resource "aws_instance" "shared_kaotik" {
+  ami                    = data.aws_ami.ubuntu.id
   instance_type          = var.instance_type
-  ami                    = "ami-052efd3df9dad4825"
   key_name               = var.key_name
   user_data              = file("userdata.sh")
+
+  vpc_security_group_ids = [aws_security_group.shared_web.id]
+
   tags = var.tags
 }
 
 resource "aws_security_group" "shared_web" {
   name        = "shared_web"
-  description = "allow ssh on 22 & http/s on port 80/443"
+  description = "allow ssh on 22 + http/https on port 80/443"
   vpc_id      = data.aws_vpc.selected.id
 
   ingress {
