@@ -48,7 +48,10 @@ resource "aws_instance" "shared_kaotik" {
 
   vpc_security_group_ids = [aws_security_group.shared_web.id]
 
-  tags = var.tags
+  tags = merge(var.tags,{
+        Name = "shared.kaotik"
+        },
+    )
 }
 
 resource "aws_security_group" "shared_web" {
