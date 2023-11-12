@@ -47,6 +47,7 @@ resource "aws_instance" "shared_kaotik" {
   user_data              = file("userdata.sh")
 
   vpc_security_group_ids = [aws_security_group.shared_web.id]
+  subnet_id              = "${element(module.vpc.public_subnets,count.index)}"
 
   tags = merge(var.tags,{
         Name = "shared.kaotik"
