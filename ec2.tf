@@ -23,12 +23,24 @@ data "aws_ami" "aws_ubuntu" {
 
 # RESOURCES
 
+resource "aws_eip" "shared_kaotik" {
+  instance = "${aws_instance.shared_kaotik.id}"
+  vpc      = true
+
+  lifecycle {
+    prevent_destroy = true
+  }
+}
+
 resource "aws_instance" "shared_kaotik" {
   instance_type          = var.instance_type
   ami                    = "ami-052efd3df9dad4825"
   key_name               = var.key_name
   user_data              = file("userdata.sh")
   tags = var.tags
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "aws_security_group" "shared_web" {
