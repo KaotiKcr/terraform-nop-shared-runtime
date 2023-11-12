@@ -21,3 +21,9 @@ variable "vpc_id" {
   type        = string
   default     = ""
 }
+
+variable "instance_type" {
+  description = "Instance Type for shared ec2"
+  type = string
+  default = "t2.micro"
+}

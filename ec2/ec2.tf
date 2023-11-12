@@ -1,4 +1,5 @@
 # DATA
+
 data "aws_ami" "aws_ubuntu" {
   most_recent = true
   owners      = ["amazon"]
@@ -21,17 +22,16 @@ data "aws_ami" "aws_ubuntu" {
 
 
 # RESOURCES
-# Ami
 
-resource "aws_instance" "aws_ubuntu" {
-  instance_type          = "t2.micro"
+resource "aws_instance" "shared_kaotik" {
+  instance_type          = var.instance_type
   ami                    = "ami-052efd3df9dad4825"
   key_name               = var.key_name
-  user_data              = file("userdata.tpl")
+  user_data              = file("userdata.sh")
+  tags = var.tags
 }
 
-# Security group
-resource "aws_security_group" "demo_sg" {
+resource "aws_security_group" "shared_web" {
   name        = "demo_sg"
   description = "allow ssh on 22 & http on port 80"
   vpc_id      = aws_default_vpc.default.id
