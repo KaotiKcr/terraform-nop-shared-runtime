@@ -108,7 +108,7 @@ jobs:
 
     - name: Terraform Unlock State
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-      run: terraform force-unlock 59ffb303-3332-23a4-caa4-59181ed7ef8d
+      run: terraform force-unlock -force 59ffb303-3332-23a4-caa4-59181ed7ef8d
 
 
     - name: Terraform Apply
