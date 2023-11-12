@@ -23,7 +23,13 @@ variable "vpc_id" {
 }
 
 variable "instance_type" {
-  description = "Instance Type for shared ec2"
+  description = "Instance Type for shared EC2"
   type = string
   default = "t2.micro"
+}
+
+variable "key_name" {
+  description = "Key pair to be used for SSH to shared EC2."
+  type        = string
+  default     = ""
 }
