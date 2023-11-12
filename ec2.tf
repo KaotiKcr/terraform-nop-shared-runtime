@@ -26,10 +26,6 @@ data "aws_ami" "aws_ubuntu" {
 resource "aws_eip" "shared_kaotik" {
   instance = "${aws_instance.shared_kaotik.id}"
   domain      = true
-
-  lifecycle {
-    prevent_destroy = true
-  }
 }
 
 resource "aws_instance" "shared_kaotik" {
@@ -38,9 +34,6 @@ resource "aws_instance" "shared_kaotik" {
   key_name               = var.key_name
   user_data              = file("userdata.sh")
   tags = var.tags
-  lifecycle {
-    prevent_destroy = true
-  }
 }
 
 resource "aws_security_group" "shared_web" {
