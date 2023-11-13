@@ -30,7 +30,7 @@ resource "aws_instance" "webserver" {
   aws_availability_zones = element(local.azs, 0)
   subnet_id              = element(data.aws_vpc.selected.public_subnets, 0)
 
-  tags = merge(var.tags,{
+  tags = merge(local.tags,{
         Name = "${local.name_prefix}-webserver"
         },
     )
@@ -39,13 +39,15 @@ resource "aws_instance" "webserver" {
 resource "aws_ebs_volume" "webserver-root" {
   availability_zone = aws_instance.webserver.availability_zone
   size              = 7
+  # encryption TODO
 
-  tags = merge(var.tags,{
+  tags = merge(local.tags,{
     Name = "${local.name_prefix}-webserver-root"
     },
+  )
 }
 
-resource "aws_volume_attachment" "this" {
+resource "aws_volume_attachment" "webserver-root" {
   device_name = "/dev/sdh"
   volume_id   = aws_ebs_volume.webserver-root.id
   instance_id = aws_instance.webserver.id
