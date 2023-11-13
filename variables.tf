@@ -3,12 +3,12 @@
 #---------------------------------------------------------------------------------------------------
 variable "application" {
   description = "application name"
-  default = "<replace_with_your_project_or_application_name, use short name if possible, because some resources have length limit on its name>"
+  default = "shared.web"
 }
 
 variable "environment" {
   description = "environment name"
-  default = "<replace_with_environment_name, such as dev, svt, prod,etc. Use short name if possible, because some resources have length limit on its name>"
+  default = "prod"
 }
 
 variable "tags" {
@@ -16,6 +16,8 @@ variable "tags" {
   type        = map(string)
   default = {
     ManagedByTerraform = "True"
+    Application = "shared.web"
+    Environment = "prod"
   }
 }
 

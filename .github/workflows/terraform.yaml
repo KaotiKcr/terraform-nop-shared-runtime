@@ -46,7 +46,7 @@ jobs:
     - name: Terraform Plan
       id: plan
       if: github.event_name == 'pull_request'
-      run: terraform plan -input=false -var-file env/kaotik-prod/terraform.tfvars -var vpc_id="$TF_VAR_VPC_ID" -var key_name="$TF_VAR_KEY_NAME"
+      run: terraform plan -input=false -var vpc_id="$TF_VAR_VPC_ID" -var key_name="$TF_VAR_KEY_NAME"
       continue-on-error: true
 
     - name: Pull Request Comment
@@ -108,4 +108,4 @@ jobs:
 
     - name: Terraform Apply
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-      run: terraform apply -auto-approve -input=false -var-file env/kaotik-prod/terraform.tfvars -var vpc_id="$TF_VAR_VPC_ID" -var key_name="$TF_VAR_KEY_NAME"
+      run: terraform apply -auto-approve -input=false -var vpc_id="$TF_VAR_VPC_ID" -var key_name="$TF_VAR_KEY_NAME"
