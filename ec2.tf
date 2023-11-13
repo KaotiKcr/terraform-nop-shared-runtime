@@ -34,13 +34,13 @@ resource "aws_instance" "shared_web" {
   #subnet_id              = XXXXXXX --- data.aws_vpc.selected.public_subnets --- "${element(module.vpc.public_subnets,count.index)}"
 
   tags = merge(var.tags,{
-        Name = "${local.name_prefix}-shared-web"
+        Name = "${local.name_prefix}-webserver"
         },
     )
 }
 
 resource "aws_security_group" "shared_web" {
-  name        = "${local.name_prefix}-shared-web"
+  name        = "${local.name_prefix}-internet-access"
   description = "allow ssh on 22 + http/https on port 80/443"
   vpc_id      = data.aws_vpc.selected.id
 
