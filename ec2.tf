@@ -27,7 +27,7 @@ resource "aws_instance" "webserver" {
   instance_type          = var.instance_type
 
   vpc_security_group_ids = [aws_security_group.internet-access.id]
-  aws_availability_zones = element(local.azs, 0)
+  availability_zone = element(local.azs, 0)
   subnet_id              = element(data.aws_subnets.all, 0).id
   #subnet_id              = sort(data.aws_subnets.all.ids)[0].id
   #subnet_id              = data.aws_subnets.all[0].id
