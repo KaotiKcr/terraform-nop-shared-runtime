@@ -61,7 +61,7 @@ resource "aws_eip" "webserver" {
 resource "aws_security_group" "internet-access" {
   name        = "${local.name_prefix}-internet-access"
   description = "allow ssh on 22 + http/https on port 80/443"
-  vpc_id      = data.aws_vpc.selected.id
+  vpc_id      = data.aws_vpc.vpc.id
 
   ingress {
     from_port        = 22

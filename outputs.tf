@@ -3,7 +3,7 @@ output "hello_kaotik" {
 }
 
 output "vpc_id" {
-  value       = data.aws_vpc.selected.id
+  value       = data.aws_vpc.vpc.id
 }
 
 output "aws_instance_public_dns" {
