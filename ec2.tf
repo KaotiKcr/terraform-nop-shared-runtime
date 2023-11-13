@@ -30,7 +30,7 @@ resource "aws_instance" "shared_web" {
   key_name               = var.key_name
   user_data              = file("userdata.sh")
 
-  vpc_security_group_ids = [aws_security_group.shared_web.id]
+  vpc_security_group_ids = [aws_security_group.internet-access.id]
   #subnet_id              = XXXXXXX --- data.aws_vpc.selected.public_subnets --- "${element(module.vpc.public_subnets,count.index)}"
 
   tags = merge(var.tags,{
@@ -39,7 +39,7 @@ resource "aws_instance" "shared_web" {
     )
 }
 
-resource "aws_security_group" "shared_web" {
+resource "aws_security_group" "internet-access" {
   name        = "${local.name_prefix}-internet-access"
   description = "allow ssh on 22 + http/https on port 80/443"
   vpc_id      = data.aws_vpc.selected.id
