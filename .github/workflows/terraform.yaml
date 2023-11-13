@@ -14,6 +14,9 @@ env:
   TF_VAR_VPC_ID: ${{ secrets.TF_VAR_VPC_ID }}
   TF_VAR_KEY_NAME: ${{ secrets.TF_VAR_KEY_NAME }}
 
+concurrency:
+  group: terraform
+
 jobs:
   terraform:
     name: Plan / Apply
