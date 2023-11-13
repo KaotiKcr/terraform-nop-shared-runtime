@@ -1,58 +1,46 @@
 # DATA
 
-data "aws_ami" "aws_ubuntu" {
-  most_recent = true
-  owners      = ["amazon"]
-
- filter {
-    name   = "name"
-    values = ["amzn-ami-hvm*"]
-  }
-
-  filter {
-    name   = "root-device-type"
-    values = ["ebs"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-}
-
 data "aws_ami" "ubuntu" {
     most_recent = true
     filter {
         name = "name"
-        values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+        values = ["ubuntu/images/hvm-ssd/ubuntu-focal-22.04-amd64-server-*"]
     }
     filter {
         name   = "virtualization-type"
         values = ["hvm"]
+    }
+    filter {
+        name   = "root-device-type"
+        values = ["ebs"]
     }
     owners = ["099720109477"]
 }
 
 # RESOURCES
 
-resource "aws_eip" "shared_kaotik" {
-  instance = "${aws_instance.shared_kaotik.id}"
+resource "aws_eip" "shared_web" {
+  instance = "${aws_instance.shared_web.id}"
   domain = "vpc"
 }
 
-resource "aws_instance" "shared_kaotik" {
+resource "aws_instance" "shared_web" {
   ami                    = data.aws_ami.ubuntu.id
   instance_type          = var.instance_type
   key_name               = var.key_name
   user_data              = file("userdata.sh")
 
   vpc_security_group_ids = [aws_security_group.shared_web.id]
+  #subnet_id              = XXXXXXX --- data.aws_vpc.selected.public_subnets --- "${element(module.vpc.public_subnets,count.index)}"
 
-  tags = var.tags
+  tags = merge(var.tags,{
+        Name = "${local.name_prefix}-shared-web"
+        },
+    )
 }
 
 resource "aws_security_group" "shared_web" {
-  name        = "shared_web"
+  name        = "${local.name_prefix}-shared-web"
   description = "allow ssh on 22 + http/https on port 80/443"
   vpc_id      = data.aws_vpc.selected.id
 

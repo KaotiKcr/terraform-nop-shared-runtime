@@ -1,12 +1,23 @@
 #---------------------------------------------------------------------------------------------------
 # General
 #---------------------------------------------------------------------------------------------------
+variable "application" {
+  description = "application name"
+  default = "shared.web"
+}
+
+variable "environment" {
+  description = "environment name"
+  default = "prod"
+}
 
 variable "tags" {
   description = "A mapping of tags to assign to resources."
   type        = map(string)
   default = {
-    Terraform = "true"
+    ManagedByTerraform = "True"
+    Application = "shared.web"
+    Environment = "prod"
   }
 }
 
