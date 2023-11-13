@@ -19,30 +19,62 @@ data "aws_ami" "ubuntu" {
 
 # RESOURCES
 
-resource "aws_eip" "shared_web" {
-  instance = "${aws_instance.shared_web.id}"
-  domain = "vpc"
-}
-
-resource "aws_instance" "shared_web" {
+resource "aws_instance" "webserver" {
   ami                    = data.aws_ami.ubuntu.id
-  instance_type          = var.instance_type
   key_name               = var.key_name
   user_data              = file("userdata.sh")
 
-  vpc_security_group_ids = [aws_security_group.internet-access.id]
-  #subnet_id              = XXXXXXX --- data.aws_vpc.selected.public_subnets --- "${element(module.vpc.public_subnets,count.index)}"
+  instance_type          = var.instance_type
 
-  tags = merge(var.tags,{
+  vpc_security_group_ids = [aws_security_group.internet-access.id]
+  availability_zone = element(local.azs, 0)
+  subnet_id              = sort(data.aws_subnets.all.ids)[0]
+  #subnet_id              = sort(data.aws_subnets.all.ids)[0].id
+  #subnet_id              = data.aws_subnets.all[0].id
+
+  root_block_device {
+    volume_size    = 8
+    volume_type    = "gp2"
+    tags = merge(local.tags,{
+      Name = "${local.name_prefix}-webserver-root"
+      },
+    )
+
+  }
+
+  tags = merge(local.tags,{
         Name = "${local.name_prefix}-webserver"
         },
     )
 }
 
+resource "aws_ebs_volume" "webserver-data" {
+  availability_zone = aws_instance.webserver.availability_zone
+  size              = 21
+  # encryption TODO
+
+  tags = merge(local.tags,{
+    Name = "${local.name_prefix}-webserver-data"
+    },
+  )
+}
+
+resource "aws_volume_attachment" "webserver-data" {
+  device_name = "/dev/sdd"
+  volume_id   = aws_ebs_volume.webserver-data.id
+  instance_id = aws_instance.webserver.id
+  force_detach = true
+}
+
+resource "aws_eip" "webserver" {
+  instance = aws_instance.webserver.id
+  domain = "vpc"
+}
+
 resource "aws_security_group" "internet-access" {
   name        = "${local.name_prefix}-internet-access"
   description = "allow ssh on 22 + http/https on port 80/443"
-  vpc_id      = data.aws_vpc.selected.id
+  vpc_id      = data.aws_vpc.vpc.id
 
   ingress {
     from_port        = 22
