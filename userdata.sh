@@ -5,7 +5,7 @@ sudo apt upgrade
 
 sudo apt install -y nginx
 echo "<h1>Hello KaotiK</h1>" > /var/www/html/index.html
-sudo systemctl restart nginx
+sudo systemctl start nginx
 
 #Installing Docker
 # sudo apt-get remove docker docker-engine docker.io
