@@ -33,6 +33,7 @@ resource "aws_instance" "webserver" {
   #subnet_id              = data.aws_subnets.all[0].id
 
   root_block_device {
+    # encryption TODO
     volume_size    = 8
     volume_type    = "gp2"
     tags = merge(local.tags,{
@@ -43,15 +44,15 @@ resource "aws_instance" "webserver" {
   }
 
   tags = merge(local.tags,{
-        Name = "${local.name_prefix}-webserver"
-        },
-    )
+    Name = "${local.name_prefix}-webserver"
+    },
+  )
 }
 
 resource "aws_ebs_volume" "webserver-data" {
+  # encryption TODO
   availability_zone = aws_instance.webserver.availability_zone
   size              = 21
-  # encryption TODO
 
   tags = merge(local.tags,{
     Name = "${local.name_prefix}-webserver-data"
@@ -69,6 +70,11 @@ resource "aws_volume_attachment" "webserver-data" {
 resource "aws_eip" "webserver" {
   instance = aws_instance.webserver.id
   domain = "vpc"
+
+  tags = merge(local.tags,{
+    Name = "${local.name_prefix}-webserver"
+    },
+  )
 }
 
 resource "aws_security_group" "internet-access" {
