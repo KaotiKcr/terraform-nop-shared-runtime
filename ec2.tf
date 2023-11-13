@@ -28,7 +28,7 @@ resource "aws_instance" "webserver" {
 
   vpc_security_group_ids = [aws_security_group.internet-access.id]
   availability_zone = element(local.azs, 0)
-  subnet_id              = toset(data.aws_subnets.all.ids)[0].id
+  subnet_id              = sort(data.aws_subnets.all.ids)[0]
   #subnet_id              = sort(data.aws_subnets.all.ids)[0].id
   #subnet_id              = data.aws_subnets.all[0].id
 
