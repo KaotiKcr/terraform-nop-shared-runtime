@@ -3,7 +3,7 @@
 #---------------------------------------------------------------------------------------------------
 variable "application" {
   description = "application name"
-  default = "shared.web"
+  default = "shared-services"
 }
 
 variable "environment" {
