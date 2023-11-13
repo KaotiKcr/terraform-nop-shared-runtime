@@ -32,6 +32,15 @@ resource "aws_instance" "webserver" {
   #subnet_id              = sort(data.aws_subnets.all.ids)[0].id
   #subnet_id              = data.aws_subnets.all[0].id
 
+  root_block_device {
+    volume_size    = 8
+    volume_type    = "gp2"
+    tags = merge(local.tags,{
+      Name = "${local.name_prefix}-webserver-root"
+      },
+    )
+
+  }
 
   tags = merge(local.tags,{
         Name = "${local.name_prefix}-webserver"
@@ -39,21 +48,22 @@ resource "aws_instance" "webserver" {
     )
 }
 
-resource "aws_ebs_volume" "webserver-root" {
+resource "aws_ebs_volume" "webserver-data" {
   availability_zone = aws_instance.webserver.availability_zone
-  size              = 7
+  size              = 21
   # encryption TODO
 
   tags = merge(local.tags,{
-    Name = "${local.name_prefix}-webserver-root"
+    Name = "${local.name_prefix}-webserver-data"
     },
   )
 }
 
-resource "aws_volume_attachment" "webserver-root" {
-  device_name = "/dev/sdh"
-  volume_id   = aws_ebs_volume.webserver-root.id
+resource "aws_volume_attachment" "webserver-data" {
+  device_name = "/dev/sdd"
+  volume_id   = aws_ebs_volume.webserver-data.id
   instance_id = aws_instance.webserver.id
+  force_detach = true
 }
 
 resource "aws_eip" "webserver" {
