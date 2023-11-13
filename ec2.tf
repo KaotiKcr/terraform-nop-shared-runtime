@@ -28,7 +28,7 @@ resource "aws_instance" "webserver" {
 
   vpc_security_group_ids = [aws_security_group.internet-access.id]
   aws_availability_zones = element(local.azs, 0)
-  subnet_id              = element(data.aws_subnets.default, 0)
+  subnet_id              = element(data.aws_subnets.default, 0).id
 
   tags = merge(local.tags,{
         Name = "${local.name_prefix}-webserver"
