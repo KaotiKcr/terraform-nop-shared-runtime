@@ -30,7 +30,7 @@ resource "aws_instance" "webserver" {
   availability_zone = element(local.azs, 0)
   #subnet_id              = element(data.aws_subnets.all, 0).id
   #subnet_id              = sort(data.aws_subnets.all.ids)[0].id
-  subnet_id              = data.aws_subnets.all[0]
+  subnet_id              = data.aws_subnets.all[0].id
 
   root_block_device {
     volume_size    = 8
